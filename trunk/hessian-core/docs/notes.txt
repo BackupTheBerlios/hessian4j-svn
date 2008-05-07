@@ -1,0 +1,21 @@
+I. Parser
+---------
+Areas of improvment
+-------------------
+Large strings/binaries could be streamed to temporary files, a special instance of HessianString/HessianBinary could be created that keeps track of a temp file which contains the data. In this way, very large data can be handled (eg. on a document server) without having to read all data into memory at once.
+
+Decisions
+---------
+'t' strings never occur in isolation. That is why they are not parsed in the switch but inside the constructs where they occur: lists/maps.
+
+'O' classdef are not values according to the spec. That is why they are not returned from the nextValue() but they are stored for internal use.
+
+No separate types for type strings, use the normal HessianString. No separate type for length. In the beginning I thouhgt these were needed because they have a different representation. But after writing the parser I realized that the parsing/rendering of these sub-elements is done in the composite parent, so the targeted objects do not have to render themselves. Therefore there is no need for a separate representation.
+
+II. Serializer
+--------------
+Primitive arrays of short/byte/char/float are represented as hessian arrays of integers/long/doubles.
+This is possible because the type of the elements can be derived from the array type.
+So we can optimize by representing the elements with native hessian elements.
+We cannot do the same thing if the objects appear separately. If we encounter an instance of Short, we must
+serialize this as a complete object with a class, because otherwise we cannot know how to deserialize it.
