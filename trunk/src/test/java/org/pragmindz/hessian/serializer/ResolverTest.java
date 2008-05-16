@@ -47,6 +47,18 @@ public class ResolverTest
         }
     }
 
+    public static class MyClass3 implements Serializable
+    {
+        String firstName;
+        String name;
+
+        public MyClass3(String aFirstName, String aName)
+        {
+            name = aName;
+            firstName = aFirstName;
+        }
+    }
+
     public static class MyClass2 implements Serializable
     {
        String name;
@@ -55,7 +67,7 @@ public class ResolverTest
         {
             String lFirstName = name.substring(0,name.indexOf(','));
             String lLastName = name.substring(name.indexOf(',')+1,name.length());
-            return new MyClass1(lFirstName,lLastName);
+            return new MyClass3(lFirstName,lLastName);
         }
     }
 
@@ -67,7 +79,7 @@ public class ResolverTest
         HessianObject lVal = (HessianObject)serializer.serialize(lPojo);
         Assert.assertEquals("org.pragmindz.hessian.serializer.ResolverTest$MyClass2",lVal.getHessianClassdef().getType().getValue());
 
-        MyClass1 lPojo2 = (MyClass1) serializer.deserialize(lVal);
+        MyClass3 lPojo2 = (MyClass3) serializer.deserialize(lVal);
         Assert.assertEquals("Boris",lPojo2.firstName);
         Assert.assertEquals("Jeltsjin",lPojo2.name);
     }

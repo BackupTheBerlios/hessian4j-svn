@@ -61,9 +61,9 @@ public class HelperRepository<T extends Helper>
                 // somewhere below the current node.
                 // We first visit the children to see if we have to add further down to a child.
                 boolean insertedToSomeChild = false;
-                for (Object aChildren : children)
+                for (Object aChild : children)
                 {
-                    HelperTreeNode<T> lChild = (HelperTreeNode<T>) aChildren;
+                    HelperTreeNode<T> lChild = (HelperTreeNode<T>) aChild;
                     boolean lSuccess = lChild.insertNode(aNode);
                     if (lSuccess)
                     {

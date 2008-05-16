@@ -48,7 +48,7 @@ implements HessianHelper
         this.helpername = helpername;
         this.fieldNames = fieldNames;
         this.fieldTypes = fieldTypes;
-        this.classdef = new HessianClassdef(helpedclass.getName(), fieldNames);
+//        this.classdef = new HessianClassdef(helpedclass.getName(), fieldNames);
         args = new Object[fieldNames.length];
     }
 
@@ -112,6 +112,7 @@ implements HessianHelper
     throws HessianSerializerException
     {
         if (!(helpedclass.isAssignableFrom(aJavaObject.getClass()))) throw new HessianSerializerException(String.format("%1$s error while serializing. Expected a '%2$s' object but received a '%3$s' object.", helpername, helpedclass.getName(), aJavaObject.getClass().getName()));
+        classdef = new HessianClassdef(aEngine.getNamer().mapJava2Hessian(helpedclass.getName()), fieldNames);
         final HessianObject lResult = new HessianObject(classdef);
         try
         {
@@ -154,9 +155,9 @@ implements HessianHelper
         return helpedclass;
     }
 
-    protected abstract Object fields2object(Object ... aFields)
+    protected abstract Object fields2object(Object ... someFields)
     throws Exception;
 
-    protected abstract void object2fields(Object aValue, Object ... aFields)
+    protected abstract void object2fields(Object aValue, Object ... someFields)
     throws Exception;
 }

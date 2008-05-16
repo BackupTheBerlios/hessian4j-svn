@@ -32,14 +32,16 @@ public class AnnotationTest
     public void testAnnotion() throws HessianSerializerException
     {
         MyDate lDate = new MyDate(new Date().getTime(),"UTC+01");
+        lDate.setTestAttr("oeleboele");
         HessianSerializer serializer = new HessianSerializer();
         HessianObject lVal = (HessianObject)serializer.serialize(lDate);
-        Assert.assertEquals(4,lVal.getHessianClassdef().size());
+        Assert.assertEquals(5,lVal.getHessianClassdef().size());
         Assert.assertNotNull(lVal.getField("_HESCONS_0"));
         Assert.assertNotNull(lVal.getField("_HESCONS_1"));
         MyDate lDate2 = (MyDate) serializer.deserialize(lVal);
         Assert.assertEquals(lDate.theDate,lDate2.theDate);
         Assert.assertEquals(lDate.theTimeZone,lDate2.theTimeZone);
+        Assert.assertEquals(lDate.testAttr, lDate2.testAttr);
     }
 
 
@@ -47,6 +49,7 @@ public class AnnotationTest
     {
         private Date theDate;
         private String theTimeZone;
+        private String testAttr;
 
         @HessianConstruct
         public MyDate(long aTime, String aTimeZone)
@@ -59,6 +62,11 @@ public class AnnotationTest
         public Object[] getTime()
         {
             return new Object[] {theDate.getTime(), theTimeZone};
+        }
+
+        public void setTestAttr(final String aTestAttr)
+        {
+            testAttr = aTestAttr;
         }
     }
 }
