@@ -39,8 +39,8 @@ import java.util.*;
  * Looks for fields inside objects. Troubles might occur for shadowed fields with same name in different classes in the
  * inheritance tree. If this happens, serialization will probably go wrong.
  */
-public class ObjectHelperBis
-implements HessianHelper
+public class ObjectHelperDirect
+        implements HessianHelper
 {
     private Class helpedClass = Object.class;
     private static final String HESCONS = "_HESCONS_";
@@ -70,7 +70,7 @@ implements HessianHelper
             final Method lMeth = getAnnotatedSerializingMethod(aClass);
 
             if((lMeth == null && lCons != null) || (lMeth != null && lCons == null))
-                throw new HessianSerializerException(String.format("ObjectHelperBis found inconsistency in class: '%1$s'. If annotated methods are used, it should contain both @HessianConstruct and @HessianSerialize together.", aClass.getClass().getName()));
+                throw new HessianSerializerException(String.format("ObjectHelperDirect found inconsistency in class: '%1$s'. If annotated methods are used, it should contain both @HessianConstruct and @HessianSerialize together.", aClass.getClass().getName()));
 
             lResult = new AnnotatedMethods(lCons, lMeth);
             annotatedPool.put(aClass, lResult);
@@ -154,7 +154,7 @@ implements HessianHelper
             }
             catch (Exception e)
             {
-                throw new HessianSerializerException(String.format("ObjectHelperBis error while trying to invoke 'writeReplace' on instance of class: '%1$s'.", aJavaObject.getClass().getName()), e);
+                throw new HessianSerializerException(String.format("ObjectHelperDirect error while trying to invoke 'writeReplace' on instance of class: '%1$s'.", aJavaObject.getClass().getName()), e);
             }
         }
         ////////////////////////////////////////////////////////////////////////////
@@ -199,7 +199,7 @@ implements HessianHelper
         // We add a check on the definition. If there are no fields inside the
         // object, the object class cannot have meaning ...
         if (lDef.size() <= 0)
-            throw new HessianSerializerException(String.format("ObjectHelperBis error while serializing. Cannot find any fields to serialize instances of class: '%1$s'.", lJavaClass.getName()));
+            throw new HessianSerializerException(String.format("ObjectHelperDirect error while serializing. Cannot find any fields to serialize instances of class: '%1$s'.", lJavaClass.getName()));
 
         // Part II: the object.
         // Create object and write the properties according to the
@@ -218,11 +218,11 @@ implements HessianHelper
             }
             catch (HessianSerializerException e)
             {
-                throw new HessianSerializerException(String.format("ObjectHelperBis error while serializing. Error while serializing field: '%1$s' from instance of class: '%2$s'.", lFld.getName(), lJavaClass.getName()), e);
+                throw new HessianSerializerException(String.format("ObjectHelperDirect error while serializing. Error while serializing field: '%1$s' from instance of class: '%2$s'.", lFld.getName(), lJavaClass.getName()), e);
             }
             catch (Exception e)
             {
-                throw new HessianSerializerException(String.format("ObjectHelperBis error while serializing. Error while reading field: '%1$s' from instance of class: '%2$s'.", lFld.getName(), lJavaClass.getName()), e);
+                throw new HessianSerializerException(String.format("ObjectHelperDirect error while serializing. Error while reading field: '%1$s' from instance of class: '%2$s'.", lFld.getName(), lJavaClass.getName()), e);
             }
         }
 
@@ -236,7 +236,7 @@ implements HessianHelper
             }
             catch(Exception e)
             {
-                throw new HessianSerializerException(String.format("ObjectHelperBis error while serializing. Error while invoking the @HessianSerialize method called '%1$s(...)' on an instance of class: '%2$s'.", lAnnotated.serialize.getName(), lJavaClass.getName()), e);
+                throw new HessianSerializerException(String.format("ObjectHelperDirect error while serializing. Error while invoking the @HessianSerialize method called '%1$s(...)' on an instance of class: '%2$s'.", lAnnotated.serialize.getName(), lJavaClass.getName()), e);
             }
 
             int i = 0;
@@ -251,7 +251,7 @@ implements HessianHelper
             }
             catch(HessianSerializerException e)
             {
-                throw new HessianSerializerException(String.format("ObjectHelperBis error while serializing. Error while serializing element nr %1$d from the @HessianSerialize method: '%2$s(...)' on instance of class: '%3$s'.", i, lAnnotated.serialize.getName(), lJavaClass.getName()), e);
+                throw new HessianSerializerException(String.format("ObjectHelperDirect error while serializing. Error while serializing element nr %1$d from the @HessianSerialize method: '%2$s(...)' on instance of class: '%3$s'.", i, lAnnotated.serialize.getName(), lJavaClass.getName()), e);
             }
         }
         return lResult;
@@ -261,7 +261,7 @@ implements HessianHelper
     throws HessianSerializerException
     {
         if (!(aValue instanceof HessianObject))
-            throw new HessianSerializerException(String.format("ObjectHelperBis error while deserializing. Expected a HessianObject but received instanceo of: '%1$s'.", aValue.getClass().getName()));
+            throw new HessianSerializerException(String.format("ObjectHelperDirect error while deserializing. Expected a HessianObject but received instanceo of: '%1$s'.", aValue.getClass().getName()));
 
         // Gather some information about the object before proceeding.
         final HessianObject lObj = (HessianObject) aValue;
@@ -295,7 +295,7 @@ implements HessianHelper
                     }
                     catch(HessianSerializerException e)
                     {
-                        throw new HessianSerializerException(String.format("ObjectHelperBis error while deserializing. Error while calling the @HessianConstruct constructor in class: '%1$s' on parameter nr: %2$d with a value of class: '%3$s'.", lJavaClass.getName(), i, lVal.getClass().getName()), e);
+                        throw new HessianSerializerException(String.format("ObjectHelperDirect error while deserializing. Error while calling the @HessianConstruct constructor in class: '%1$s' on parameter nr: %2$d with a value of class: '%3$s'.", lJavaClass.getName(), i, lVal.getClass().getName()), e);
                     }
                 }
 
@@ -306,7 +306,7 @@ implements HessianHelper
                 }
                 catch(Exception e)
                 {
-                    throw new HessianSerializerException(String.format("ObjectHelperBis error while deserializing. Tried to instantiate an object (using annotated constructor) of class: '%1$s'.", lType.getValue()), e);
+                    throw new HessianSerializerException(String.format("ObjectHelperDirect error while deserializing. Tried to instantiate an object (using annotated constructor) of class: '%1$s'.", lType.getValue()), e);
                 }               
             }
             else
@@ -339,7 +339,7 @@ implements HessianHelper
                         }
                         catch (Exception e)
                         {
-                            throw new HessianSerializerException(String.format("ObjectHelperBis error while deserializing. Type error while trying to set the field: '%1$s' in class: '%2$s' with a value of class: '%3$s'.", lFld.getName(), lJavaClass.getName(), lFldValue.getClass().getName()), e);
+                            throw new HessianSerializerException(String.format("ObjectHelperDirect error while deserializing. Type error while trying to set the field: '%1$s' in class: '%2$s' with a value of class: '%3$s'.", lFld.getName(), lJavaClass.getName(), lFldValue.getClass().getName()), e);
                         }
                     }
                 }
@@ -367,7 +367,7 @@ implements HessianHelper
                 }
                 catch (Exception e)
                 {
-                    throw new HessianSerializerException(String.format("ObjectHelperBis error while deserializing. Tried to invoke 'readResolve' on instance of class: '%1$s'.", lResult.getClass().getName()), e);
+                    throw new HessianSerializerException(String.format("ObjectHelperDirect error while deserializing. Tried to invoke 'readResolve' on instance of class: '%1$s'.", lResult.getClass().getName()), e);
                 }
             }
             ////////////////////////////////////////////////////////////////////////////
@@ -376,15 +376,15 @@ implements HessianHelper
         }
         catch (ClassNotFoundException e)
         {
-            throw new HessianSerializerException(String.format("ObjectHelperBis error while deserializing. Tried to load the class: '%1$s'.", lType.getValue()), e);
+            throw new HessianSerializerException(String.format("ObjectHelperDirect error while deserializing. Tried to load the class: '%1$s'.", lType.getValue()), e);
         }
         catch (IllegalAccessException e)
         {
-            throw new HessianSerializerException(String.format("ObjectHelperBis error while deserializing. Tried to access the class: '%1$s'.", lType.getValue()), e);
+            throw new HessianSerializerException(String.format("ObjectHelperDirect error while deserializing. Tried to access the class: '%1$s'.", lType.getValue()), e);
         }
         catch (InstantiationException e)
         {
-            throw new HessianSerializerException(String.format("ObjectHelperBis error while deserializing. Tried to instantiate an object (using default constructor) of class: '%1$s'.", lType.getValue()), e);
+            throw new HessianSerializerException(String.format("ObjectHelperDirect error while deserializing. Tried to instantiate an object (using default constructor) of class: '%1$s'.", lType.getValue()), e);
         }
     }
 

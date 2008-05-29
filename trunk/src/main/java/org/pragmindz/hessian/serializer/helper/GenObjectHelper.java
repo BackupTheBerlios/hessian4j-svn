@@ -48,7 +48,7 @@ implements HessianHelper
         this.helpername = helpername;
         this.fieldNames = fieldNames;
         this.fieldTypes = fieldTypes;
-//        this.classdef = new HessianClassdef(helpedclass.getName(), fieldNames);
+        this.classdef = new HessianClassdef(helpedclass.getName(), fieldNames);
         args = new Object[fieldNames.length];
     }
 

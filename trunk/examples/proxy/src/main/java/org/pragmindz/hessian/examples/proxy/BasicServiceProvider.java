@@ -19,9 +19,9 @@ package org.pragmindz.hessian.examples.proxy;
     License along with this library; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
+
 import org.pragmindz.hessian.proxy.IServiceProvider;
 import org.pragmindz.hessian.proxy.ServiceNotFound;
-import org.pragmindz.hessian.examples.proxy.QuoteService;
 
 public class BasicServiceProvider implements IServiceProvider
 {

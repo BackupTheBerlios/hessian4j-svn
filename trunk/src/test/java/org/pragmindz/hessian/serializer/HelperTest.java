@@ -5,7 +5,11 @@ import org.pragmindz.hessian.serializer.namer.ChainNamer;
 import org.pragmindz.hessian.serializer.namer.Namer;
 import org.pragmindz.hessian.serializer.namer.IdentityNamer;
 import org.pragmindz.hessian.model.HessianValue;
+import org.pragmindz.hessian.parser.HessianRenderException;
 import junit.framework.TestCase;
+
+import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 
 public class HelperTest extends TestCase
 {
@@ -44,7 +48,7 @@ public class HelperTest extends TestCase
         protected void object2fields(Object aValue, Object... someFields) throws Exception
         {
             final Customer lCust = (Customer) aValue;
-            someFields[0] = lCust.name + " " +  lCust.firstName;
+            someFields[0] = lCust.name + " " + lCust.firstName;
             someFields[1] = lCust.address.street + " " + lCust.address.city;
         }
     }
@@ -65,7 +69,7 @@ public class HelperTest extends TestCase
         }
     }
 
-    public void testHelper() throws HessianSerializerException
+    public void testHelper() throws HessianSerializerException, HessianRenderException
     {
         //Create our Customer
         final Customer lCust = new Customer();
@@ -76,8 +80,8 @@ public class HelperTest extends TestCase
         lCust.firstName = "Graham";
         lCust.address = lAddr;
         final HessianSerializer lSerializer = new HessianSerializer();
-        lSerializer.getRepo().addHelper(new CustomerHelper(Customer.class, "Whatever", new String[] {"name","address"}, new Class[] {String.class, String.class}));
-        lSerializer.setNamer(new ChainNamer(new Namer[] {new CustomerNamer(), new IdentityNamer()}));
+        lSerializer.getRepo().addHelper(new CustomerHelper(Customer.class, "Whatever", new String[]{"name", "address"}, new Class[]{String.class, String.class}));
+        lSerializer.addNamer(new CustomerNamer());
         HessianValue lVal = lSerializer.serialize(lCust);
         System.out.println(lVal.prettyPrint());
     }

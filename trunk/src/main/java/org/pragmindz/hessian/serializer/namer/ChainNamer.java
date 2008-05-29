@@ -21,21 +21,26 @@ package org.pragmindz.hessian.serializer.namer;
 */
 import org.pragmindz.hessian.serializer.HessianSerializerException;
 
+import java.util.LinkedList;
+
 public class ChainNamer
 implements Namer
 {
-    private Namer[] namers;
+    private LinkedList<Namer> namers = new LinkedList<Namer>();
 
     public ChainNamer(Namer ... aNamerChain)
     {
-        namers = aNamerChain;
+        for (Namer lNamer : aNamerChain)
+        {
+            namers.addLast(lNamer);
+        }
     }
 
     public String mapHessian2Java(String aHessianName)
     throws HessianSerializerException
     {
         String lName = aHessianName;
-        for(int i = 0; i < namers.length; i++) lName = namers[i].mapHessian2Java(lName);
+        for(int i = 0; i < namers.size(); i++) lName = namers.get(i).mapHessian2Java(lName);
         return lName;
     }
 
@@ -43,7 +48,12 @@ implements Namer
     throws HessianSerializerException
     {
         String lName = aJavaName;
-        for(int i = 0; i < namers.length; i++) lName = namers[i].mapJava2Hessian(lName);
+        for(int i = 0; i < namers.size(); i++) lName = namers.get(i).mapJava2Hessian(lName);
         return lName;
+    }
+
+    public void add(final Namer aNamer)
+    {
+        namers.addFirst(aNamer);
     }
 }

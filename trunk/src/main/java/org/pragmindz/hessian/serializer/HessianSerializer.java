@@ -37,8 +37,7 @@ public class HessianSerializer
     private HelperRepository<HessianHelper> repo = new CachingHelperRepository<HessianHelper>();
 
     {
-//        repo.addHelper(new ObjectHelper());   // Uses getters/setters.
-        repo.addHelper(new ObjectHelperBis());  // Uses field access.
+        repo.addHelper(new ObjectHelperDirect());  // Uses field access by default, change this by setFieldAccess() method.
         repo.addHelper(new ClassHelper());
         repo.addHelper(new StringHelper());
         repo.addHelper(new BooleanHelper());
@@ -67,7 +66,8 @@ public class HessianSerializer
         repo.addHelper(new InvocationTargetExceptionHelper());
     }
 
-    private Namer namer = new ChainNamer(new WipeHibernateNamer(), new IdentityNamer());
+    private ChainNamer namer = new ChainNamer(new IdentityNamer());
+    private boolean fieldAccess;
 
     public HessianValue serialize(Object aJavaObject)
     throws HessianSerializerException
@@ -243,13 +243,29 @@ public class HessianSerializer
         this.repo = repo;
     }
 
-    public Namer getNamer()
+    public ChainNamer getNamer()
     {
         return namer;
     }
 
-    public void setNamer(Namer namer)
+    /**
+     * Determines the way Java objects are inspected (by Java-beans introspection using the getters/setters or by direct field access).
+     * 
+     * @param aValue true for direct field access, false for use with getters/setters
+     */
+    public void setFieldAccess(boolean aValue)
     {
-        this.namer = namer;
+       repo.addHelper(aValue ? new ObjectHelperDirect() : new ObjectHelper());
+       fieldAccess = aValue;
+    }
+
+    public boolean isFieldAccess()
+    {
+        return fieldAccess;
+    }
+
+    public void addNamer(Namer aNamer)
+    {
+        namer.add(aNamer);
     }
 }

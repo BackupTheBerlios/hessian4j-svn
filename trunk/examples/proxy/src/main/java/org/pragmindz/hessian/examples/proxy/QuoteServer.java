@@ -19,11 +19,11 @@ package org.pragmindz.hessian.examples.proxy;
     License along with this library; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
+
+import org.mortbay.jetty.Server;
 import org.mortbay.jetty.servlet.Context;
 import org.mortbay.jetty.servlet.ServletHolder;
-import org.mortbay.jetty.Server;
 import org.pragmindz.hessian.proxy.HessianServlet;
-import org.pragmindz.hessian.examples.proxy.BasicServiceProvider;
 
 public class QuoteServer
 {

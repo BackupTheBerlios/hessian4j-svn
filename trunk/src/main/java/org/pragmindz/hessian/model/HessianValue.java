@@ -25,6 +25,11 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Ancestor class of the Hessian model.
+ * <br>
+ * All Hessian model classes extend from here.
+ */
 public abstract class HessianValue
 {
     public void render(OutputStream aStream) throws HessianRenderException
@@ -32,6 +37,15 @@ public abstract class HessianValue
         render(aStream, new ArrayList<HessianString>(), new ArrayList<HessianClassdef>(), new ArrayList<HessianComplex>());
     }
 
+    /**
+     * Renders the <code>HessianValue</code> to the given <code>OutputStream</code>.
+     *
+     * @param aStream to which to render
+     * @param types list to store the type strings for maps and lists
+     * @param classDefs list to store the class definitions
+     * @param objects list to store the objects
+     * @throws HessianRenderException
+     */
     public abstract void render(OutputStream aStream, List<HessianString> types, List<HessianClassdef> classDefs, List<HessianComplex> objects)
     throws HessianRenderException;
 

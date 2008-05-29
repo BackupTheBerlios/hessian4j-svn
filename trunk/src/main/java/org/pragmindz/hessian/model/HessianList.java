@@ -52,7 +52,7 @@ extends HessianComplex
     public HessianList()
     {
         type = null;
-        variable = true;
+        variable = false;
         data = new LinkedList<HessianValue>();
     }
 
