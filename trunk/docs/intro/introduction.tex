@@ -145,7 +145,22 @@ BigDecimal lResult = (BigDecimal) lSerializer.deserialize(lVal);
 \end{lstlisting}
 \medskip
 
-As you notice on line \ref{prettyprint}, you can always \lstinline$prettyPrint()$ a \lstinline$HessianValue$ to inspect the Hessian representation. We (de)serialize a \lstinline$BigDecimal$ here. \lstinline$BigDecimal$ is one of those classes without a default constructor, that's where our \lstinline$BigDecimalHelper$\footnote{This helper is defined by default in the repository.} comes in.  What the helper basically does is converting our Java \lstinline$BigDecimal$ representation to a \lstinline$HessianObject$ with a \lstinline$HessianString$ argument. The value of this argument is the \lstinline$toString()$ value of the original \lstinline$BigDecimal$. When consequently deserializing, the same helper will call the \lstinline$BigDecimal(String)$ constructor with the value of the string argument. Basically, the real (de)serialization work is done within the Helper classes, the \lstinline$HessianSerializer$ mainly keeps the context (more on this later).
+We (de)serialize a \lstinline$BigDecimal$ here. \lstinline$BigDecimal$ is one of those classes without a default constructor, that's where our \lstinline$BigDecimalHelper$\footnote{This helper is defined by default in the repository.} comes in.  What the helper basically does is converting our Java \lstinline$BigDecimal$ representation to a \lstinline$HessianObject$ with a \lstinline$HessianString$ argument. The value of this argument is the \lstinline$toString()$ value of the original \lstinline$BigDecimal$. When consequently deserializing, the same helper will call the \lstinline$BigDecimal(String)$ constructor with the value of the string argument. Basically, the real (de)serialization work is done within the Helper classes, the \lstinline$HessianSerializer$ mainly keeps the context (more on this later).
+
+As you notice on line \ref{prettyprint}, you can always \lstinline$prettyPrint()$ a \lstinline$HessianValue$ to inspect the Hessian representation. 
+
+\medskip
+\begin{lstlisting}
+<classdef#0:'java.math.BigDecimal'> //*\label{classdef}
+[0] val //*\label{valfield}
+
+<object@0:'java.math.BigDecimal'#0> //*\label{hessianobject}
+[0] <string:"10.00">
+\end{lstlisting}
+\medskip
+
+The dump shows that the Hessian data contains a Hessian class definition on line \ref{classdef}. The index of the classdefs as they are written to the stream is mentioned in the dump: ``\lstinline$#0$''. The classdef contains a single field named ```\lstinline$val$'' which is written out on line \ref{valfield}. The dump contains a single object on line \ref{hessianobject} of the classdef. The only field contains a value of type string which is a textual representation of a \lstinline$BigDecimal$.
+
 
 When writing your own helper, there is a generic \lstinline$GenObjectHelper$ class you can extend from or you can make your own from scratch by implementing the \lstinline$HessianHelper$ interface.  When (de)serializing Java objects that don't have a specific Helper class we fall back to one of the 2 generic object helpers, \lstinline$ObjectHelper$ or \lstinline$ObjectHelperDirect$. The difference between the 2 is the approach they take to read/write the attributes. \lstinline$ObjectHelper$ uses the JavaBean approach and as such calls the getters/setters of the object.  The \lstinline$ObjectHelperDirect$ implementation on the contrary uses reflection to directly access your attributes. By calling the \lstinline$setFieldAccess()$ method on the \lstinline$HessianSerializer$ you can switch between these 2. 
 By default, direct field access is used.
