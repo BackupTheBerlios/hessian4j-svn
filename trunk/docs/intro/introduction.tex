@@ -21,8 +21,24 @@
 %%
 %% Configuration of the document properties.
 %%
+\definecolor{Brown}{cmyk}{0,0.81,1,0.60}
+\definecolor{OliveGreen}{cmyk}{0.64,0,0.95,0.40}
+\definecolor{CadetBlue}{cmyk}{0.62,0.57,0.23,0}
 \definecolor{codebackground}{rgb}{0.9,0.9,0.9}
-\lstset{language=Java, basicstyle=\footnotesize, numbers=left, numberstyle=\tiny, escapeinside={//*}{\^^M}, frame=none, fontadjust=true, backgroundcolor=\color{codebackground}}
+\lstset{
+    numbers=left, 
+    numberstyle=\tiny, 
+    escapeinside={//*}{\^^M}, 
+    frame=none, 
+    fontadjust=true, 
+    backgroundcolor=\color{codebackground},
+    basicstyle=\ttfamily\small{}, 
+    keywordstyle=\color{OliveGreen}\bfseries,
+    identifierstyle=\color{CadetBlue}, 
+    commentstyle=\color{Brown}\itshape,
+    stringstyle=\ttfamily,
+    showstringspaces=true,
+     language=java}
 \usepackage{fullpage}
 \addtolength{\oddsidemargin}{0.3cm}
 \addtolength{\evensidemargin}{0.3cm}
