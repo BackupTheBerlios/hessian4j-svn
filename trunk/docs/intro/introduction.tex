@@ -45,12 +45,12 @@
 %%
 \section{What is Hessian?}
 
-In a nutshell, Hessian is a binary data transfer protocol with the following characteristics :
+In a nutshell, Hessian is a binary data transfer protocol with the following characteristics:
 
 \begin{itemize}
 	\item It is completely self describing, class definitions are contained within the data stream. The stream is self contained, no separate definition files are needed. 
 	\item It is language agnostic, various language implementations currently exist. 
-	\item It is compact in comparison with the hyped XML stuff. XML was invented to annotate documents whereas Hessian was invented to represent binary data in a standard way.
+	\item It is compact in comparison with the hyped XML\footnote{Extensible Markup Language. See \url{http://en.wikipedia.org/wiki/XML}.} stuff. XML was invented to annotate documents whereas Hessian was invented to represent binary data in a standard way.
 	\item It's a stateless protocol.
 \end{itemize}
 
@@ -63,7 +63,7 @@ The Java implementation discussed in this document, named Hessian4J, differs fro
 	\item The transformation from Java objects to the Hessian wire data is performed through an intermediate model. 
 \end{itemize}
 
-This last item was our primary motivation to create an alternative implementation. The existance of an intermediate Hessian model permits processing of the data (transformation, validation, routing,...) without requiring the existance of the associated Java business model. If you are creating a web interface for example, all classes used in the definition of the interface have to be available on the client and on the server. An intermediate agent is now able to read and parse the Hessian stream without having to reconstruct the business model. The intermediate model in our Hessian imlementation is what the DOM model is for XML.
+This last item was our primary motivation to create an alternative implementation. The existence of an intermediate Hessian model permits processing of the data (transformation, validation, routing, ...) without requiring the existence of the associated Java business model. If you are creating a web interface for example, all classes used in the definition of the interface have to be available on the client and on the server. An intermediate agent is now able to read and parse the Hessian stream without having to reconstruct the business model. The intermediate model in our Hessian implementation is what the DOM\footnote{Document Object Model. See \url{http://en.wikipedia.org/wiki/Document_Object_Model}.} model is for XML.
 
 %%
 %% SECTION WHAT IS IT GOOD FOR?
@@ -94,17 +94,15 @@ Basically you can use it to stream any data to a file or over the network. Becau
 \end{figure}
 \smallskip
 
-As mentioned before the Hessian4J implementation transforms your Java model to the Hessian format through an intermediate model. This is illustrated in Figure \ref{fig:concept}.
-
-Translating this to the software architecture we get the following :
+As mentioned before the Hessian4J implementation transforms your Java model to the Hessian format through an intermediate model. This is illustrated in Figure \ref{fig:concept}. Translating this to the software architecture we get the following :
 
 \begin{itemize}
-	\item \emph{HessianSerializer} class which does the serializing and deserializing. The terms "serialize" and "deserialize" mean the conversion between your Java object model and the Hessian object model.
-	\item \emph{HessianParser} class which parses the Hessian data stream to the Hessian model. The term "parse" means to read something in Hessian and convert it to the Hessian object model.
+	\item \lstinline$HessianSerializer$ class which does the serializing and deserializing. The terms "serialize" and "deserialize" mean the conversion between your Java object model and the Hessian object model.
+	\item \lstinline$HessianParser$ class which parses the Hessian data stream to the Hessian model. The term "parse" means to read something in Hessian and convert it to the Hessian object model.
 	\item The Hessian model classes that are able to render themselves to the Hessian wire data format. The term "render" means to write a Hessian object representation to a Hessian encoded stream.
 \end{itemize}
 
-The Hessian model in fact is a hierarchical Java representation of the Hessian data types. The following figure illustrates its  basic structure :
+The Hessian model in fact is a hierarchical Java representation of the Hessian data types. Figure \ref{fig:model} illustrates a part of its basic structure.
 
 \smallskip
 \begin{figure}[htp]
@@ -119,7 +117,7 @@ The Hessian model in fact is a hierarchical Java representation of the Hessian d
 %%
 \section{The serialization phase}
 
-Let's first discuss the serialization from a Java object to its Hessian model representation. This process is driven by the \emph{HessianSerializer}. The serializer performs its task with the assistance of a set of hierachically structured \emph{helpers}. A so-called helper knows how to (de)serialize a specific class to/from the Hessian model. The HessianSerializer contains a repository with a predefined set of helper classes. You can add your own helper class to this repository if needed. It is the responsibility of these helpers to convert your Java objects to a corresponding Hessian model and vice-versa. Let's look at the following example :
+Let's first discuss the serialization from a Java object to its Hessian model representation. This process is driven by the \lstinline$HessianSerializer$. The serializer performs its task with the assistance of a set of hierarchically structured helpers. A so-called helper knows how to (de)serialize a specific class to/from the Hessian model. The \lstinline$HessianSerializer$ contains a repository with a predefined set of helper classes. You can add your own helper class to this repository if needed. It is the responsibility of these helpers to convert your Java objects to a corresponding Hessian model and vice-versa. Let's look at the following example:
 
 \medskip
 \begin{lstlisting}
@@ -128,9 +126,9 @@ HessianValue lVal = lSer.serialize(myObject); //* \label{serializeobject}
 \end{lstlisting}
 \medskip
 
-That's all there is. On line \ref{createserializer} a serializer is created. On line \ref{serializeobject} your java object is transformed to a Hessian representation and is ready to be rendered to a stream.
+That's all there is. On line \ref{createserializer} a serializer is created. On line \ref{serializeobject} your Java object is transformed to a Hessian representation and is ready to be rendered to a stream.
 
-\subsection{What's a \emph{helper} ?}
+\subsection{What's a ``helper''?}
 
 Like we said before, you can add your own helper to the serializer repository. 
 One of the most common cases you will need to do this is when you are dealing with Java classes that have no default constructor.
@@ -147,14 +145,14 @@ BigDecimal lResult = (BigDecimal) lSerializer.deserialize(lVal);
 \end{lstlisting}
 \medskip
 
-As you notice on line \ref{prettyprint}, you can always prettyPrint a HessianValue to inspect the Hessian representation. We (de)serialize a BigDecimal here. BigDecimal is one of those classes without a default constructor, that's where our BigDecimalHelper\footnote{This helper is defined by default in the repository.} comes in.  What the helper basically does is converting our Java BigDecimal representation to a HessianObject with a HessianString argument. The value of this argument is the toString() value of the original BigDecimal. When consequently deserializing, the same helper will call the BigDecimal(String) constructor with the value of the string argument. Basically, the real (de)serialization work is done within the Helper classes, the HessianSerializer mainly keeps the context (more on this later).
+As you notice on line \ref{prettyprint}, you can always \lstinline$prettyPrint()$ a \lstinline$HessianValue$ to inspect the Hessian representation. We (de)serialize a \lstinline$BigDecimal$ here. \lstinline$BigDecimal$ is one of those classes without a default constructor, that's where our \lstinline$BigDecimalHelper$\footnote{This helper is defined by default in the repository.} comes in.  What the helper basically does is converting our Java \lstinline$BigDecimal$ representation to a \lstinline$HessianObject$ with a \lstinline$HessianString$ argument. The value of this argument is the \lstinline$toString()$ value of the original \lstinline$BigDecimal$. When consequently deserializing, the same helper will call the \lstinline$BigDecimal(String)$ constructor with the value of the string argument. Basically, the real (de)serialization work is done within the Helper classes, the \lstinline$HessianSerializer$ mainly keeps the context (more on this later).
 
-When writing your own helper, there is a generic GenObjectHelper class you can extend from or you can make your own from scratch by implementing the HessianHelper interface.  When (de)serializing Java objects that don't have a specific Helper class we fall back to one of the 2 generic object helpers, ObjectHelper or ObjectHelperDirect. The difference between the 2 is the approach they take to read/write the attributes. ObjectHelper uses the JavaBean approach and as such calls the getters/setters of the object.  The ObjectHelperDirect implementation on the contrary uses reflection to directly access your attributes. By calling the setFieldAccess() method on the HessianSerializer you can switch between these 2. 
+When writing your own helper, there is a generic \lstinline$GenObjectHelper$ class you can extend from or you can make your own from scratch by implementing the \lstinline$HessianHelper$ interface.  When (de)serializing Java objects that don't have a specific Helper class we fall back to one of the 2 generic object helpers, \lstinline$ObjectHelper$ or \lstinline$ObjectHelperDirect$. The difference between the 2 is the approach they take to read/write the attributes. \lstinline$ObjectHelper$ uses the JavaBean approach and as such calls the getters/setters of the object.  The \lstinline$ObjectHelperDirect$ implementation on the contrary uses reflection to directly access your attributes. By calling the \lstinline$setFieldAccess()$ method on the \lstinline$HessianSerializer$ you can switch between these 2. 
 By default, direct field access is used.
 
 \subsection{What's a ``namer''?}
 
-Besides the Helpers another facility that is used by the (de)serializer is the Namer. The Namer translates between Java class names and corresponding Hessian names and vice-versa. This can be useful if the consumer of your data uses another naming convention or uses another programming languaga alltogether. The type names and class names in the Hessian model do not have to correspond to Java class names. The namers allow you to replace the automatically generated Java names with your own names. Namers are chained, when serializing each class-name encountered is passed to the namer chain.
+Besides the Helpers another facility that is used by the (de)serializer is the Namer. The Namer translates between Java class names and corresponding Hessian names and vice-versa. This can be useful if the consumer of your data uses another naming convention or uses another programming language altogether. The type names and class names in the Hessian model do not have to correspond to Java class names. The namers allow you to replace the automatically generated Java names with your own names. Namers are chained, when serializing each class-name encountered is passed to the namer chain.
 
 The following example illustrates this :
 
@@ -196,14 +194,14 @@ public class NamerSample
 \end{lstlisting}
 \medskip
 
-In this sample we serialize a BigDecimal as class FOO and deserialize it again to a BigDecimal.  One example of the use of namers is the \lstinline$WipeHibernateNamer$. When working with Hibernate you don't always want to transfer the Hibernate specific collection classes to your client app. In that case, you can add the WipeHibernateNamer which will translate the respective collection names to their Java equivalents. 
+In this sample we serialize a \lstinline$BigDecimal$ as class FOO and deserialize it again to a \lstinline$BigDecimal$.  One example of the use of namers is the \lstinline$WipeHibernateNamer$. When working with Hibernate you don't always want to transfer the Hibernate specific collection classes to your client application. In that case, you can add the \lstinline$WipeHibernateNamer$ which will translate the respective collection names to their Java equivalents. 
 
 \subsection{Annotations}
 
 When talking about helpers we mentioned the usage for classes without a default constructor. However, when you have full control over the class there is a simpler way to come around this problem. Hessian4J provides 2 annotations for this purpose, namely \lstinline$@HessianConstruct$ and \lstinline$@HessianSerialize$.
 
 
-The method annoted with HessianSerialize should return an array of objects that can be passed (in the given order) to the constructor annotated with the HessianConstruct annotation. Using this approach avoids having to write a Helper class. 
+The method annotated with \lstinline$HessianSerialize$ should return an array of objects that can be passed (in the given order) to the constructor annotated with the \lstinline$HessianConstruct$ annotation. Using this approach avoids having to write a Helper class. 
 The following snippet illustrates this :
 
 \medskip
@@ -234,20 +232,18 @@ public static class MyDate
 %%
 \section{The renderer}
 
-There is no real Hessian renderer, instead each Hessian model class is able to render itself to the Hessian wire protocol format by calling its
-render() method. The result of the rendering is put in the OutputStream you pass to it.
-If you want to play a bit around with it, then just pass it a FileOutputStream and use your favorite HEX-editor to view the Hessian data.
+There is no real Hessian renderer, instead each Hessian model class is able to render itself to the Hessian wire protocol format by calling its \lstinline$render()$ method. The result of the rendering is put in the \lstinline$OutputStream$ you pass to it. If you want to play a bit around with it, then just pass it a \lstinline$FileOutputStream$ and use your favorite hexadecimal editor to view the Hessian data.
 
-Besides the OutputStream the render method expects another 3 list-arguments, 'types', 'classdefs' and 'objects'. A renderer uses these to make references to classes or objects that have already been rendered in the same context. The types list is used for to store the type of maps or lists (eg ArrayList, LinkedList...) in order to be able to reference it once the same collection type occurs more then once in the data stream.
+Besides the \lstinline$OutputStream$ the render method expects another 3 list-arguments, 'types', 'classdefs' and 'objects'. A renderer uses these to make references to classes or objects that have already been rendered in the same context. The types list is used for to store the type of maps or lists (eg \lstinline$ArrayList, LinkedList$, ...) in order to be able to reference it once the same collection type occurs more then once in the data stream.
 
 %%
 %% SECTION - PARSER
 %%
 \section{The parser}
 
-The HessianParser sequentially reads and parses the given Hessian input stream to transform it into a HessianValue. It's a one-pass parser which makes the parsing very fast.  Note that the parser is not thread-safe (parsing information is stored internally), so every parsing thread should instantiate its own parser.
+The \lstinline$HessianParser$ sequentially reads and parses the given Hessian input stream to transform it into a \lstinline$HessianValue$. It's a one-pass parser which makes the parsing very fast.  Note that the parser is not thread-safe (parsing information is stored internally), so every parsing thread should instantiate its own parser.
 
-The use of the parser is very straightforward, instantiate it giving it an inputstream and call the nextValue() method to parse the first available data element in the stream. 
+The use of the parser is very straightforward, instantiate it giving it an \lstinline$InputStream$ and call the \lstinline$nextValue()$ method to parse the first available data element in the stream. 
 
 \medskip
 \begin{lstlisting}
@@ -263,7 +259,7 @@ final HessianValue lMyString = lMyParser.nextValue();
 
 The deserialization takes the same approach as the serialization, it uses the same mechanism of namers and helpers to convert your Hessian value to the corresponding Java object.
 
-Just invoke it by calling the deserialize() method passing it your HessianValue like in the following example :
+Just invoke it by calling the \lstinline$deserialize()$ method passing it your \lstinline$HessianValue$ like in the following example :
 
 \medskip
 \begin{lstlisting}
@@ -276,7 +272,7 @@ Order lOrder2 = (Order) serializer.deserialize(aHessianValue);
 %%
 \section{A simple example showing it all}
 
-To summarize this quickstart, consider the following snippet, which serializes and renders an order to a ByteArrayOutputStream and subsequently parses and deserializes it again to its Java representation.
+To summarize this quick start, consider the following snippet, which serializes and renders an order to a \lstinline$ByteArrayOutputStream$ and subsequently parses and deserializes it again to its Java representation.
 
 \medskip
 \begin{lstlisting}
@@ -344,6 +340,6 @@ public class OrderSample
 %%
 \section{What next ?}
 
-This concludes this quick guide to Hessian4J. In another issue we will cover the Hessian webservice specification which defines the use of Hessian in a webservice context.  The current implementation provides already the basic elements as defined in the draft\footnote{\url{http://hessian.caucho.com/doc/hessian-ws.html}}. Please download the software (its licensed as LGPL\footnote{GNU Lesser General Public License. See more at \url{http://www.gnu.org/licenses/lgpl.html}. In short, you can use it for commercial and non-commercial purposes, as long as you distribute the license text of Hessian4J as well.}) and try it out. All feedback, positive or negative, is welcome.  Currently we're working on integration with the Spring framework for a next release.
+This concludes this quick guide to Hessian4J. In another issue we will cover the Hessian web service specification which defines the use of Hessian in a web service context.  The current implementation provides already the basic elements as defined in the draft\footnote{\url{http://hessian.caucho.com/doc/hessian-ws.html}}. Please download the software (its licensed as LGPL\footnote{GNU Lesser General Public License. See more at \url{http://www.gnu.org/licenses/lgpl.html}. In short, you can use it for commercial and non-commercial purposes, as long as you distribute the license text of Hessian4J as well.}) and try it out. All feedback, positive or negative, is welcome.  Currently we're working on integration with the Spring framework for a next release.
 
 \end{document}
