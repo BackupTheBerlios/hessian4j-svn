@@ -369,24 +369,13 @@ public class HessianParser
                     final long lStartDef = pos - 1;
                     try
                     {
-                        final HessianValue lLen = nextValue(lookahead());
-                        if (!(lLen instanceof HessianInteger))
-                            throw new HessianParserException(String.format("Expected hessian integer to indicate the length of the type field. Received an instance of: '%1$s'.", lLen.getClass().getSimpleName()));
-                        int lLenVal = ((HessianInteger) lLen).getValue();
+                        // Read the type string first.
+                        final HessianValue lTypeRepr = nextValue(lookahead());
+                        if (!(lTypeRepr instanceof HessianString))
+                            throw new HessianParserException(String.format("Expected hessian string to indicate the class type. Received an instance of: '%1$s'.", lTypeRepr.getClass().getSimpleName()));
+                        final HessianString lType = (HessianString) lTypeRepr;
 
-                        // Secondly we read the type string.
-                        final HessianString lType;
-                        final long lStartType = pos;
-                        try
-                        {
-                            readBuffer(lLenVal, "object type type string ('O')");
-                            lType = new HessianString(new String(buffer, 0, lLenVal, "UTF-8"));
-                        }
-                        catch (UnsupportedEncodingException e)
-                        {
-                            throw new HessianParserException(String.format("Error while reading a type string ('O') at position: %1$d.", lStartType), e);
-                        }
-
+                        // Read the number of fields.
                         final HessianValue lNrFields = nextValue(lookahead());
                         if (!(lNrFields instanceof HessianInteger))
                             throw new HessianParserException(String.format("Expected hessian integer to indicate the number of fields. Received an instance of: '%1$s'.", lNrFields.getClass().getSimpleName()));
@@ -398,7 +387,7 @@ public class HessianParser
                         {
                             final HessianValue lFld = nextValue(lookahead());
                             if (!(lFld instanceof HessianString))
-                                throw new HessianParserException(String.format("Expected object field name to be a string. Received an instance of: '%1$s'.", lLen.getClass().getSimpleName()));
+                                throw new HessianParserException(String.format("Expected object field name to be a string. Received an instance of: '%1$s'.", lFld.getClass().getSimpleName()));
                             lVal.add((HessianString) lFld);
                         }
 

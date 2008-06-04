@@ -108,12 +108,8 @@ extends HessianSimple
         {
             aStream.write('O');
 
-            //Render the type string
-            //Note that we don't render it as a normal type string (we omit the 't' and render the length as an 'int')
-            final byte[] lUtf8 = type.getValue().getBytes("UTF8");
-            final int lLength = lUtf8.length;
-            HessianInteger.valueOf(lLength).render(aStream, types, classDefs, objects);
-            aStream.write(lUtf8);
+            // Render the type string.
+            type.render(aStream, types, classDefs, objects);
 
             //Render the field count
             HessianInteger.valueOf(size()).render(aStream, types, classDefs, objects);
