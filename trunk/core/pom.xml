@@ -7,7 +7,7 @@
     <groupId>org.pragmindz.hessian</groupId>
     <artifactId>hessian-core</artifactId>
     <packaging>jar</packaging>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <name>Hessian Core</name>
     <description>Alternate implementation of the Caucho Hessian 2.0 serialization and webservice protocol</description>
 
