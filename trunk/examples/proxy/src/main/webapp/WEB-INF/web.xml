@@ -1,7 +1,20 @@
 <!DOCTYPE web-app PUBLIC
- "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
- "http://java.sun.com/dtd/web-app_2_3.dtd" >
+        "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+        "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
 <web-app>
-  <display-name>Archetype Created Web Application</display-name>
+    <display-name>Hessian proxy sample app</display-name>
+    <servlet>
+        <servlet-name>hessian</servlet-name>
+        <display-name>Hessian Dispatcher Servlet</display-name>
+        <servlet-class>org.pragmindz.hessian.proxy.HessianServlet</servlet-class>
+        <init-param>
+            <param-name>serviceProvider</param-name>
+            <param-value>org.pragmindz.hessian.proxy.BasicServiceProvider</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>hessian</servlet-name>
+        <url-pattern>/*</url-pattern>
+    </servlet-mapping>
 </web-app>

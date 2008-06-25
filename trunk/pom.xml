@@ -13,5 +13,6 @@
 
     <modules>
         <module>core</module>
+	<module>proxy</module>
     </modules>
 </project>

@@ -1,0 +1,5 @@
+<services>
+    <service name="testService" impl="org.pragmindz.hessian.proxy.BasicServiceProviderTest$TestService" singleton="false"/>
+    <service name="testService2" impl="org.pragmindz.hessian.proxy.BasicServiceProviderTest$TestService2" singleton="true"/>
+    <service name="quoteService" impl="org.pragmindz.hessian.proxy.QuoteService" singleton="true"/>
+</services>

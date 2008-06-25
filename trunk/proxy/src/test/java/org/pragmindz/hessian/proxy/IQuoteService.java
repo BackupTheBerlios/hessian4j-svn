@@ -1,4 +1,4 @@
-package org.pragmindz.hessian.examples.proxy;
+package org.pragmindz.hessian.proxy;
 /*
     Hessian4J - Java Hessian Library
     Copyright (C) 2008 PragMindZ

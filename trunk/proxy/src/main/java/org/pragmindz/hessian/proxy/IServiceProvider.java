@@ -1,4 +1,4 @@
-package org.pragmindz.hessian.examples.proxy;
+package org.pragmindz.hessian.proxy;
 /*
     Hessian4J - Java Hessian Library
     Copyright (C) 2008 PragMindZ
@@ -19,24 +19,7 @@ package org.pragmindz.hessian.examples.proxy;
     License along with this library; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
-
-import org.mortbay.jetty.Server;
-import org.mortbay.jetty.servlet.Context;
-import org.mortbay.jetty.servlet.ServletHolder;
-import org.pragmindz.hessian.proxy.HessianServlet;
-
-public class QuoteServer
+public interface IServiceProvider
 {
-    public QuoteServer() throws Exception
-    {
-        Server server = new Server(8090);
-        Context root = new Context(server, "/", Context.SESSIONS);
-        root.addServlet(new ServletHolder(new HessianServlet(new BasicServiceProvider())), "/*");
-        server.start();
-    }
-
-    public static void main(String[] args) throws Exception
-    {
-        QuoteServer lSvr = new QuoteServer();
-    }
+    public Object getService(String aServiceName) throws ServiceNotFound;
 }

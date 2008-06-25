@@ -1,4 +1,4 @@
-package org.pragmindz.hessian.examples.proxy;
+package org.pragmindz.hessian.proxy;
 /*
     Hessian4J - Java Hessian Library
     Copyright (C) 2008 PragMindZ
@@ -22,9 +22,15 @@ package org.pragmindz.hessian.examples.proxy;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public interface IQuoteService
+public class QuoteService implements IQuoteService
 {
-    BigDecimal getQuote(String aTicker);
+    public BigDecimal getQuote(String aTicker)
+    {
+        return new BigDecimal("10.00");
+    }
 
-    BigDecimal getQuote(String aTicker, Date aValididyDate);
+    public BigDecimal getQuote(String aTicker, Date aValididyDate)
+    {
+        return new BigDecimal("9.55");
+    }
 }

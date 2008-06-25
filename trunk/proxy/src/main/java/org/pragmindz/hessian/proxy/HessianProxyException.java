@@ -1,4 +1,4 @@
-package org.pragmindz.hessian.examples.proxy;
+package org.pragmindz.hessian.proxy;
 /*
     Hessian4J - Java Hessian Library
     Copyright (C) 2008 PragMindZ
@@ -19,12 +19,10 @@ package org.pragmindz.hessian.examples.proxy;
     License along with this library; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
-import java.math.BigDecimal;
-import java.util.Date;
-
-public interface IQuoteService
+public class HessianProxyException extends Exception
 {
-    BigDecimal getQuote(String aTicker);
-
-    BigDecimal getQuote(String aTicker, Date aValididyDate);
+    public HessianProxyException(final String aMsg)
+    {
+        super(aMsg);
+    }
 }

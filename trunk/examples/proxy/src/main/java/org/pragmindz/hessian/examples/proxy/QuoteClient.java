@@ -23,12 +23,14 @@ import org.pragmindz.hessian.proxy.HessianProxy;
 import org.pragmindz.hessian.examples.proxy.IQuoteService;
 
 import java.net.MalformedURLException;
+import java.util.Date;
 
 public class QuoteClient
 {
     public static void main(String[] args) throws MalformedURLException
     {
-        IQuoteService lProxy = (IQuoteService) HessianProxy.create("http://localhost:8090/quoteService", IQuoteService.class);
+        IQuoteService lProxy = (IQuoteService) HessianProxy.create("http://localhost:8080/proxy/quoteService", IQuoteService.class);
         System.out.println("Quote for IBM : "+lProxy.getQuote("IBM"));
+        System.out.println("Quote for IBM on specific date : "+lProxy.getQuote("IBM", new Date()));
     }
 }

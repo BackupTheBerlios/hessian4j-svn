@@ -1,4 +1,4 @@
-package org.pragmindz.hessian.examples.proxy;
+package org.pragmindz.hessian.proxy;
 /*
     Hessian4J - Java Hessian Library
     Copyright (C) 2008 PragMindZ
@@ -19,19 +19,6 @@ package org.pragmindz.hessian.examples.proxy;
     License along with this library; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
-
-import org.pragmindz.hessian.proxy.IServiceProvider;
-import org.pragmindz.hessian.proxy.ServiceNotFound;
-
-public class BasicServiceProvider implements IServiceProvider
+public class ServiceNotFound extends Exception
 {
-    public Object getService(String aServiceName) throws ServiceNotFound
-    {
-        if ("quoteService".equals(aServiceName))
-        {
-           return new QuoteService();
-        }
-        else
-            throw new ServiceNotFound();
-    }
 }

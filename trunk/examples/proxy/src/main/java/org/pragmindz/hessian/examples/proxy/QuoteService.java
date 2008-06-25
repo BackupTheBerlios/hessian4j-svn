@@ -22,11 +22,17 @@ package org.pragmindz.hessian.examples.proxy;
 import org.pragmindz.hessian.examples.proxy.IQuoteService;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 public class QuoteService implements IQuoteService
 {
     public BigDecimal getQuote(String aTicker)
     {
         return new BigDecimal("10.00");
+    }
+
+    public BigDecimal getQuote(String aTicker, Date aValididyDate)
+    {
+        return new BigDecimal("9.55");
     }
 }
